@@ -15,9 +15,9 @@ function App() {
 
   const casa={
     width:100,
-    heigth:100,
+    height:100,
     display:'flex',
-    justifyContent:'enter',
+    justifyContent:'center',
     alignItems:'center',
     flexDirection:'row',
     cursor:'pointer',
@@ -25,7 +25,15 @@ function App() {
     border:'1px solid #000'
   }
 
-  //JS
+  const BtnJogarNovamente = () => {
+    if(!jogando){
+      return(
+        <button onClick={() => {reiniciarJogo()}}>Reiniciar</button>
+      )
+    }
+  }
+
+  //FUNÇÕES
   const jogoInicial=[['','',''],['','',''],['','','']]
   const [jogo,setJogo]=useState(jogoInicial)
   const [simboloAtual,setSimboloAtual]=useState('X')
@@ -35,19 +43,19 @@ function App() {
     return(
       <div style={tabu}>
         <div style={tabuLinha}>
-          <div style={casa} data-pos='00' onClick="">{j[0][0]}</div>
-          <div style={casa} data-pos='01' onClick="">{j[0][1]}</div>
-          <div style={casa} data-pos='02' onClick="">{j[0][2]}</div>
+          <div style={casa} data-pos='00' onClick={(casa) => {joga(casa)}}>{j[0][0]}</div>
+          <div style={casa} data-pos='01' onClick={(casa) => {joga(casa)}}>{j[0][1]}</div>
+          <div style={casa} data-pos='02' onClick={(casa) => {joga(casa)}}>{j[0][2]}</div>
         </div>
         <div style={tabuLinha}>
-          <div style={casa} data-pos='10' onClick="">{j[1][0]}</div>
-          <div style={casa} data-pos='11' onClick="">{j[1][1]}</div>
-          <div style={casa} data-pos='12' onClick="">{j[1][2]}</div>
+          <div style={casa} data-pos='10' onClick={(casa) => {joga(casa)}}>{j[1][0]}</div>
+          <div style={casa} data-pos='11' onClick={(casa) => {joga(casa)}}>{j[1][1]}</div>
+          <div style={casa} data-pos='12' onClick={(casa) => {joga(casa)}}>{j[1][2]}</div>
         </div>
         <div style={tabuLinha}>
-          <div style={casa} data-pos='20' onClick="">{j[2][0]}</div>
-          <div style={casa} data-pos='21' onClick="">{j[2][1]}</div>
-          <div style={casa} data-pos='22' onClick="">{j[2][2]}</div>
+          <div style={casa} data-pos='20' onClick={(casa) => {joga(casa)}}>{j[2][0]}</div>
+          <div style={casa} data-pos='21' onClick={(casa) => {joga(casa)}}>{j[2][1]}</div>
+          <div style={casa} data-pos='22' onClick={(casa) => {joga(casa)}}>{j[2][2]}</div>
         </div>
       </div>
     )
@@ -60,7 +68,6 @@ function App() {
 
     for(let l=0; l<3; l++){
       pontos=0
-
       for(let c=0; c<3; c++){
         if(jogo[l][c] == simboloAtual){
           pontos++
@@ -88,9 +95,8 @@ function App() {
     }
 
     //busca pelas diagonais
-    pontos=0
-
     //diagonal principal
+    pontos=0
     for(let d=0; d<3; d++){  
       if(jogo[d][d] == simboloAtual){
         pontos++
@@ -102,6 +108,7 @@ function App() {
     }
 
     //diagonal secundária
+    pontos=0
     for(let d=3; d>0; d--){  
       if(jogo[3-d][d-1] == simboloAtual){
         pontos++
@@ -131,10 +138,35 @@ function App() {
       return false
     }
   }
+
+  const joga = (casa) =>{
+    if(jogando){
+      if(verificaEspacoVazio(casa)){
+        jogo[retornaPosicao(casa)[0]][retornaPosicao(casa)[1]] = simboloAtual
+        trocaJogador()
+
+        if(verificaVitoria()){
+          trocaJogador()
+          alert('Jogador '+simboloAtual+' venceu!')
+          setJogando(false)
+        }
+      }
+    }else{
+      alert('Espaço inválido')
+    }
+  }
+
+  const reiniciarJogo = () => {
+    setJogando(true)
+    setJogo(jogoInicial)
+    setSimboloAtual('X')
+  }
   
   return (
     <>
-     {tabuleiro(jogo)}
+    <p>Jogador atual: {simboloAtual}</p>
+        {tabuleiro(jogo)}
+        {BtnJogarNovamente()}
     </>
   );
 }
