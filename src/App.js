@@ -54,7 +54,82 @@ function App() {
   }
 
   const verificaVitoria=() => {
-    
+    //busca pelas linhas
+    let pontos = 0
+    let vitoria = false
+
+    for(let l=0; l<3; l++){
+      pontos=0
+
+      for(let c=0; c<3; c++){
+        if(jogo[l][c] == simboloAtual){
+          pontos++
+        }
+      }
+      if(pontos == 3){
+        vitoria = true
+        return vitoria
+      }
+    }
+
+    //busca pelas colunas
+    for(let c=0; c<3; c++){
+      pontos=0
+
+      for(let l=0; l<3; l++){
+        if(jogo[l][c] == simboloAtual){
+          pontos++
+        }
+      }
+      if(pontos == 3){
+        vitoria = true
+        return vitoria
+      }
+    }
+
+    //busca pelas diagonais
+    pontos=0
+
+    //diagonal principal
+    for(let d=0; d<3; d++){  
+      if(jogo[d][d] == simboloAtual){
+        pontos++
+      }   
+    }
+    if(pontos == 3){
+      vitoria = true
+      return vitoria
+    }
+
+    //diagonal secundária
+    for(let d=3; d>0; d--){  
+      if(jogo[3-d][d-1] == simboloAtual){
+        pontos++
+      }   
+    }
+    if(pontos == 3){
+      vitoria = true
+      return vitoria
+    }
+    return
+  }
+
+  const trocaJogador = () => {
+    simboloAtual == 'X'? setSimboloAtual('O'):setSimboloAtual('X')
+  }
+
+  const retornaPosicao = (casa) => {
+    const p = casa.target.getAttribute('data-pos')
+    const pos = [parseInt(p.substring(0,1)), parseInt(p.substring(1,2))] //substring(posição start, posição end) - não inclui o end
+    return pos
+  }
+
+  const verificaEspacoVazio = (casa) => {
+    if(jogo[retornaPosicao(casa)[0]][retornaPosicao(casa)[1]] == ''){
+      return true
+    }else{
+      return false
+    }
   }
   
   return (
